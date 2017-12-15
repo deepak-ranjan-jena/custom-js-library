@@ -4,13 +4,8 @@
 */
 
 (() => {
-  // Establish the root object, `window` (`self`) in the browser, `global`
-  // on the server, or `this` in some virtual machines. We use `self`
-  // instead of `window` for `WebWorker` support.  
-  var root = typeof self == 'object' && self.self === self && self ||
-            typeof global == 'object' && global.global === global && global ||
-            this ||
-            {};
+  // Establish the root object, `window` in the browser, or `exports` on the server.
+  var root = this;
   
   // Create a safe reference to the DScript object for use below.
   var DS = function(obj) {
