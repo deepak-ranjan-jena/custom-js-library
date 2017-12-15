@@ -30,4 +30,14 @@
   
   // Current version.
   DS.VERSION = '1.0.0';
+  
+  // Returns the result in a new array iterating each element
+  DS.map = (arr, callback) => {
+    let results = []; // Initialize the new array
+    for(let i = 0, len = arr.length; i < len; i++) {
+      results.push(callback(arr[i]));
+    }
+    return results;
+  };
+  
 })();
