@@ -1,43 +1,37 @@
-/*     DScript.js 1.0.0
-*     (c) 2017 Deepak Ranjan Jena, Frontend Atchitect
-*     DScript may be freely distributed under the MIT license.
+/* DScript.js 1.0.0
+*  copyright Deepak Ranjan Jena, Frontend Atchitect
+*  DScript may be freely distributed under the MIT license.
 */
 
 (() => {
-  // Establish the root object, `window` in the browser, or `exports` on the server.
-  var root = this;
-  
   // Create a safe reference to the DScript object for use below.
-  var DS = function(obj) {
-    if (obj instanceof DS) return obj;
-    if (!(this instanceof DS)) return new DS(obj);
-  };
+  function DS(obj) {
+    return (obj instanceof DS)? obj : new DS(obj);
+  };    
   
-  // Export the DScript object for **Node.js**, with
-  // backwards-compatibility for their old module API. If we're in
-  // the browser, add `DS` as a global object.
-  // (`nodeType` is checked to ensure that `module`
-  // and `exports` are not HTML elements.)
-  
-  if (typeof exports != 'undefined' && !exports.nodeType) {
-    if (typeof module != 'undefined' && !module.nodeType && module.exports) {
-      exports = module.exports = DS;
+  /*
+  * @param(collection) - Array|Object to iterate
+  * @param(callback) - callback function that needs to be called on each iter
+  * @return - new Array with mapped value
+  */
+  function baseMap(collection, callback) {
+    // initialize the array
+    let results = [];
+    // execute callback only if it is a function and collection is an array
+    if(typeof callback == 'function' && Array.isArray(collection)) {
+      for(let i = 0, len = collection.length; i < len; i++) {
+        results[i] = callback(collection[i], i, collection);
+      }        
     }
-    exports.DS = DS;
-  } else {
-    root.DS = DS;
-  }
+    // return the mapped array
+    return results;
+  };
+
+  this.DS = DS;
   
   // Current version.
   DS.VERSION = '1.0.0';
   
-  // Returns the result in a new array iterating each element
-  DS.map = (arr, callback) => {
-    let results = []; // Initialize the new array
-    for(let i = 0, len = arr.length; i < len; i++) {
-      results.push(callback(arr[i]));
-    }
-    return results;
-  };
+  DS.map = baseMap;
   
-})();
+}).call(this);
